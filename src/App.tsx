@@ -1,10 +1,14 @@
-import LoadMoreButton from "./layout/LoadMoreButton";
-import ProductList from "./components/ProductList";
+import ProductResults from "./components/ProductResults";
+import ProductContextProvider from "./context/productContext";
+import Navbar from "./layout/Navbar";
+
 function App() {
   return (
     <>
-      <ProductList />
-      <LoadMoreButton />
+      <ProductContextProvider>
+        <Navbar />
+        <ProductResults />
+      </ProductContextProvider>
     </>
   );
 }

@@ -1,37 +1,35 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import ProductItem from "./ProductItem";
-interface Product {
-  id: number; // Assuming id is a number; change if it's a string
-  title: string;
-  images: []; // Adjust based on your actual image structure
-}
+import { ProductContext } from "../context/productContext";
+
 function ProductList() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const productContext = useContext(ProductContext);
+
+  if (!productContext) {
+    throw new Error("ProductList must be used within a ProductContextProvider");
+  }
+  const { products, getProducts, images } = productContext;
+  console.log(images);
 
   useEffect(() => {
-    const getProducts = async () => {
-      const response = await fetch("https://dummyjson.com/products?limit=5");
-      const data = await response.json();
-      // console.log(data);
-      setProducts(data.products);
-      setLoading(false);
-    };
     getProducts();
   }, []);
-  if (loading) {
-    return <div>Loading</div>;
-  } else
-    return (
-      <div className="grid grid-cols-4 gap-4">
-        {products.map((item) => {
-          // console.log(item);
+
+  return (
+    <>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+        {products.map((item, index) => {
           return (
-            <ProductItem key={item.id} name={item.title} image={item.images} />
+            <ProductItem
+              key={item.id}
+              name={item.title}
+              image={images[index]}
+            />
           );
         })}
       </div>
-    );
+    </>
+  );
 }
 
 export default ProductList;
